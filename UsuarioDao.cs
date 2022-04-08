@@ -42,7 +42,26 @@ public class UsuarioDao : IUsuarioDao
 
     public Usuario GetById(int id)
     {
-        throw new NotImplementedException();
+        using var connection = GetConnection();
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        command.CommandText = $"SELECT * FROM Usuario WHERE codigo = $id";
+        command.Parameters.AddWithValue("$id", id);
+
+        using var reader = command.ExecuteReader();
+        while(reader.Read()) {
+            Usuario usuario = new Usuario(
+                reader.GetInt32(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                reader.GetString(3),
+                reader.GetBoolean(4)                
+            );
+            return usuario;
+        }
+
+        throw new Exception("User notfound");
     }
 
     public List<Usuario> GetAll()

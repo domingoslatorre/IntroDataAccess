@@ -23,4 +23,9 @@ public class Usuario
         Senha = senha;
         Ativo = ativo;
     }
+
+    public override string ToString()
+    {
+        return $"{Codigo},{Nome},{Email},{Senha},{Ativo}";
+    }
 }
