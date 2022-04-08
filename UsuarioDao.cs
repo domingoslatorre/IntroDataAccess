@@ -2,10 +2,9 @@ using Microsoft.Data.Sqlite;
 
 public class UsuarioDao : IUsuarioDao
 {
-
     public UsuarioDao()
     {
-        using(var connection = new SqliteConnection("Data Source=database.db"))
+        using(var connection = GetConnection())
         {
             connection.Open();
             
@@ -26,11 +25,16 @@ public class UsuarioDao : IUsuarioDao
 
     public Usuario Save(Usuario usuario)
     {
-        using var connection = new SqliteConnection("Data Source=database.db");
+        using var connection = GetConnection();
         connection.Open();
         
         var command = connection.CreateCommand();
-        command.CommandText = $"INSERT INTO Usuario VALUES({usuario.Codigo}, '{usuario.Nome}', '{usuario.Email}', '{usuario.Senha}', {usuario.Ativo})";
+        command.CommandText = $"INSERT INTO Usuario VALUES($codigo, $nome, $email, $senha, $ativo)";
+        command.Parameters.AddWithValue("$codigo", usuario.Codigo);
+        command.Parameters.AddWithValue("$nome", usuario.Nome);
+        command.Parameters.AddWithValue("$email", usuario.Email);
+        command.Parameters.AddWithValue("$senha", usuario.Senha);
+        command.Parameters.AddWithValue("$ativo", usuario.Ativo);
         command.ExecuteNonQuery();
 
         return usuario;
@@ -55,4 +59,6 @@ public class UsuarioDao : IUsuarioDao
     {
         throw new NotImplementedException();
     }
+
+    private SqliteConnection GetConnection() => new SqliteConnection("Data Source=database.db");
 }
