@@ -62,7 +62,7 @@ public class UsuarioDao : IUsuarioDao
         using var connection = GetConnection();
         connection.Open();
 
-        var command = connection.CreateCommand()
+        var command = connection.CreateCommand();
         command.CommandText = $"SELECT * FROM Usuario";
 
         using var reader = command.ExecuteReader();
