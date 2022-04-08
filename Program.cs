@@ -4,3 +4,4 @@ Usuario maria = usuarioDao.Save(new Usuario(2, "Maria", "maria@email.com", "abc"
 
 Console.WriteLine(usuarioDao.GetById(2));
 
+usuarioDao.GetAll().ForEach(u => Console.WriteLine(u));

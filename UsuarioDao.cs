@@ -50,13 +50,23 @@ public class UsuarioDao : IUsuarioDao
         command.Parameters.AddWithValue("$id", id);
 
         using var reader = command.ExecuteReader();
-        return ReaderToUsuario(reader);
+        if(reader.Read()) {
+            return ReaderToUsuario(reader);
+        }
+        throw new Exception("User not found");
         
     }
 
     public List<Usuario> GetAll()
     {
-        throw new NotImplementedException();
+        using var connection = GetConnection();
+        connection.Open();
+
+        var command = connection.CreateCommand()
+        command.CommandText = $"SELECT * FROM Usuario";
+
+        using var reader = command.ExecuteReader();
+        return ReaderToListOfUsuarios(reader);
     }
 
     public Usuario Update(Usuario usuario)
@@ -71,17 +81,24 @@ public class UsuarioDao : IUsuarioDao
 
     private SqliteConnection GetConnection() => new SqliteConnection("Data Source=database.db");
 
-    private Usuario ReaderToUsuario(SqliteDataReader reader) {
+    private Usuario ReaderToUsuario(SqliteDataReader reader) 
+    {
+        Usuario usuario = new Usuario(
+            reader.GetInt32(0), 
+            reader.GetString(1),
+            reader.GetString(2),
+            reader.GetString(3),
+            reader.GetBoolean(4)                
+        );
+        return usuario;
+    }
+
+    private List<Usuario> ReaderToListOfUsuarios(SqliteDataReader reader) 
+    {
+        var usuarios = new List<Usuario>();
         while(reader.Read()) {
-            Usuario usuario = new Usuario(
-                reader.GetInt32(0), 
-                reader.GetString(1),
-                reader.GetString(2),
-                reader.GetString(3),
-                reader.GetBoolean(4)                
-            );
-            return usuario;
+            usuarios.Add(ReaderToUsuario(reader));
         }
-        throw new Exception("User notfound");
+        return usuarios;
     }
 }
