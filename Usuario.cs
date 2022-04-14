@@ -1,23 +1,23 @@
 public class Usuario 
 {
-    public int Codigo { get; }
+    public int Id { get; }
     public string Nome { get; set; }
     public string Email { get; set; }
     public string Senha { get; set; }
     public bool Ativo { get; set; }
 
-    public Usuario(int codigo, string nome, string email, string senha)
+    public Usuario(int id, string nome, string email, string senha)
     {
-        Codigo = codigo;
+        Id = id;
         Nome = nome;
         Email = email;
         Senha = senha;
         Ativo = false;
     }
 
-    public Usuario(int codigo, string nome, string email, string senha, bool ativo)
+    public Usuario(int id, string nome, string email, string senha, bool ativo)
     {
-        Codigo = codigo;
+        Id = id;
         Nome = nome;
         Email = email;
         Senha = senha;
@@ -26,6 +26,6 @@ public class Usuario
 
     public override string ToString()
     {
-        return $"{Codigo},{Nome},{Email},{Senha},{Ativo}";
+        return $"{Id},{Nome},{Email},{Senha},{Ativo}";
     }
 }

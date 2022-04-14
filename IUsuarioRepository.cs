@@ -1,4 +1,4 @@
-interface IUsuarioDao
+interface IUsuarioRepository
 {
     Usuario Save(Usuario usuario);
     Usuario GetById(int id);

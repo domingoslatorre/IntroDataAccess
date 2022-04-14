@@ -1,26 +1,12 @@
 using Microsoft.Data.Sqlite;
 
-public class UsuarioDao : IUsuarioDao
+public class UsuarioRepository : IUsuarioRepository
 {
-    public UsuarioDao()
+    public DatabaseConfig DatabaseConfig { get; }
+    
+    public UsuarioRepository(DatabaseConfig databaseConfig)
     {
-        using(var connection = GetConnection())
-        {
-            connection.Open();
-            
-            var command = connection.CreateCommand();
-            command.CommandText = 
-            @"
-            CREATE TABLE IF NOT EXISTS Usuario (
-                codigo int not null primary key,
-                nome varchar(100),
-                email varchar(100),
-                senha varchar(3),
-                ativo bool
-            );   
-            ";
-            command.ExecuteNonQuery();
-        }
+        DatabaseConfig = databaseConfig;
     }
 
     public Usuario Save(Usuario usuario)
@@ -29,8 +15,8 @@ public class UsuarioDao : IUsuarioDao
         connection.Open();
         
         var command = connection.CreateCommand();
-        command.CommandText = $"INSERT INTO Usuario VALUES($codigo, $nome, $email, $senha, $ativo)";
-        command.Parameters.AddWithValue("$codigo", usuario.Codigo);
+        command.CommandText = $"INSERT INTO Usuario VALUES($id, $nome, $email, $senha, $ativo);";
+        command.Parameters.AddWithValue("$id", usuario.Id);
         command.Parameters.AddWithValue("$nome", usuario.Nome);
         command.Parameters.AddWithValue("$email", usuario.Email);
         command.Parameters.AddWithValue("$senha", usuario.Senha);
@@ -46,7 +32,7 @@ public class UsuarioDao : IUsuarioDao
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = $"SELECT * FROM Usuario WHERE codigo = $id";
+        command.CommandText = $"SELECT * FROM Usuario WHERE id = $id;";
         command.Parameters.AddWithValue("$id", id);
 
         using var reader = command.ExecuteReader();
@@ -63,7 +49,7 @@ public class UsuarioDao : IUsuarioDao
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = $"SELECT * FROM Usuario";
+        command.CommandText = $"SELECT * FROM Usuario;";
 
         using var reader = command.ExecuteReader();
         return ReaderToListOfUsuarios(reader);
@@ -71,15 +57,39 @@ public class UsuarioDao : IUsuarioDao
 
     public Usuario Update(Usuario usuario)
     {
-        throw new NotImplementedException();
+        using var connection = GetConnection();
+        connection.Open();
+        
+        var command = connection.CreateCommand();
+        command.CommandText = 
+        @" 
+        UPDATE Usuario 
+        SET nome=$nome, email=$email, senha=$senha, ativo=$ativo
+        WHERE id=$id;
+        ";
+        command.Parameters.AddWithValue("$id", usuario.Id);
+        command.Parameters.AddWithValue("$nome", usuario.Nome);
+        command.Parameters.AddWithValue("$email", usuario.Email);
+        command.Parameters.AddWithValue("$senha", usuario.Senha);
+        command.Parameters.AddWithValue("$ativo", usuario.Ativo);
+        
+        command.ExecuteNonQuery();
+        
+        return GetById(usuario.Id);
     }
 
     public void Delete(int id)
     {
-        throw new NotImplementedException();
+        using var connection = GetConnection();
+        connection.Open();
+        
+        var command = connection.CreateCommand();
+        command.CommandText = $"DELETE FROM Usuario WHERE id=$id;";
+        command.Parameters.AddWithValue("$id", id);
+        command.ExecuteNonQuery();
     }
 
-    private SqliteConnection GetConnection() => new SqliteConnection("Data Source=database.db");
+    private SqliteConnection GetConnection() => new SqliteConnection($"Data Source={DatabaseConfig.DatabaseName}");
 
     private Usuario ReaderToUsuario(SqliteDataReader reader) 
     {
