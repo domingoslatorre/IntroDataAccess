@@ -1,3 +1,7 @@
+namespace IntroDataAccess.Repositories;
+
+using IntroDataAccess.Models;
+
 public class UsuarioRepositoryEF : IUsuarioRepository
 {
     private SistemaContext sistemaContext;

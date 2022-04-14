@@ -1,5 +1,9 @@
+namespace IntroDataAccess.Repositories;
+
 using Microsoft.Data.Sqlite;
 using Dapper;
+using IntroDataAccess.Models;
+using IntroDataAccess.Database;
 
 public class UsuarioRepositoryDapper : IUsuarioRepository
 {

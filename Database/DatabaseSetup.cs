@@ -1,9 +1,11 @@
+namespace IntroDataAccess.Database;
+
 using Microsoft.Data.Sqlite;
 
 public class DatabaseSetup
 {
     public DatabaseConfig DatabaseConfig { get; }
-    
+
     public DatabaseSetup(DatabaseConfig databaseConfig)
     {
         DatabaseConfig = databaseConfig;
@@ -17,13 +19,13 @@ public class DatabaseSetup
 
         var command = connection.CreateCommand();
         command.CommandText = $"SELECT name FROM sqlite_master WHERE type='table' AND name='Usuario';";
-        
+
         object? tableName = command.ExecuteScalar();
-        
-        if(tableName != null)
+
+        if (tableName != null)
             return;
 
-        command.CommandText = 
+        command.CommandText =
         @"
         CREATE TABLE IF NOT EXISTS Usuario (
             id int not null primary key,

@@ -1,3 +1,5 @@
+namespace IntroDataAccess.Models;
+
 public class Usuario 
 {
     public int Id { get; }

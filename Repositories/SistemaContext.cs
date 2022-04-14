@@ -1,4 +1,9 @@
+namespace IntroDataAccess.Repositories;
+
 using Microsoft.EntityFrameworkCore;
+using IntroDataAccess.Models;
+using IntroDataAccess.Database;
+
 
 public class SistemaContext : DbContext
 {

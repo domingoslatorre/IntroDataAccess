@@ -1,4 +1,8 @@
+namespace IntroDataAccess.Repositories;
+
 using Microsoft.Data.Sqlite;
+using IntroDataAccess.Models;
+using IntroDataAccess.Database;
 
 public class UsuarioRepository : IUsuarioRepository
 {

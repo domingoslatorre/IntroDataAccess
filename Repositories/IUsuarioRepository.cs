@@ -1,3 +1,7 @@
+namespace IntroDataAccess.Repositories;
+
+using IntroDataAccess.Models;
+
 interface IUsuarioRepository
 {
     Usuario Save(Usuario usuario);

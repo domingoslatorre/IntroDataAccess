@@ -1,4 +1,8 @@
-﻿var databaseConfig = new DatabaseConfig();
+﻿using IntroDataAccess.Models;
+using IntroDataAccess.Database;
+using IntroDataAccess.Repositories;
+
+var databaseConfig = new DatabaseConfig();
 
 var databaseSetup = new DatabaseSetup(databaseConfig);
 
