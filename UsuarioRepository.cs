@@ -43,7 +43,7 @@ public class UsuarioRepository : IUsuarioRepository
         
     }
 
-    public List<Usuario> GetAll()
+    public IEnumerable<Usuario> GetAll()
     {
         using var connection = GetConnection();
         connection.Open();
@@ -103,7 +103,7 @@ public class UsuarioRepository : IUsuarioRepository
         return usuario;
     }
 
-    private List<Usuario> ReaderToListOfUsuarios(SqliteDataReader reader) 
+    private IEnumerable<Usuario> ReaderToListOfUsuarios(SqliteDataReader reader) 
     {
         var usuarios = new List<Usuario>();
         while(reader.Read()) {
